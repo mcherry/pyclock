@@ -79,7 +79,7 @@ class CodePartical(object):
 
 class Group(object): 
     def __init__(self, pos, speed):
-    	# "mnatrix code" as a string made up of the current timezone/time/date
+		# "matrix code" is a string made up of the current timezone/time/date
 		timedata = datetime.now(timezone(timezones[index]))
 		timestring = timedata.strftime('%X %Z %z') + locations[index] + timezones[index]
 		self.code = list(timestring)
@@ -274,12 +274,12 @@ def main():
 					groups.append(Group([pos, -text.get_height()], speed))
 					
 				if random.randint(0,50) == 50:
-					# "mnatrix code" as a string made up of the current timezone/time/date
+					# "matrix code" is a string made up of the current timezone/time/date
 					timedata = datetime.now(timezone(timezones[index]))
 					timestring = timedata.strftime('%X %Z %z') + locations[index] + timezones[index]
 					code = list(timestring)
-					
 					random.shuffle(code, random.random)
+					
 					pos = [random.randint(1,size[0]/text_width+1)*text_width-text_width/2, random.randint(1,size[1]/text.get_height()+1)*text.get_height()]
 					groups.append(CodePartical(pos, random.randint(0,len(code)-1), code))
 
