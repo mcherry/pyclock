@@ -79,10 +79,12 @@ class CodePartical(object):
 
 class Group(object): 
     def __init__(self, pos, speed):
+    	# "mnatrix code" as a string made up of the current timezone/time/date
 		timedata = datetime.now(timezone(timezones[index]))
 		timestring = timedata.strftime('%X %Z %z') + locations[index] + timezones[index]
 		self.code = list(timestring)
 		random.shuffle(self.code, random.random)
+		
 		self.speed=int(speed)
 		self.pos =[  int(pos[0]),int(pos[1]) ]
 		self.frame = 0
@@ -146,8 +148,6 @@ def main():
 	screensaver_on = False
 	return_from_ss = False
 	screenpressed = False
-	#got_weather = False
-	#wtimer = 60
 	
 
 	# Initialise screen
@@ -155,14 +155,14 @@ def main():
 	screen = pygame.display.set_mode((480, 320))
 	pygame.mouse.set_visible(False)
 
+	# main loop that shows and cycles time
 	pos = (0, 0)
 	while 1:
 		for event in pygame.event.get():
-			#if event.type is MOUSEBUTTONDOWN:
-				#pos = pygame.mouse.get_pos()
-				#print pos
-				
 			if event.type is MOUSEBUTTONUP:
+				# disable mousebuttonup events while procesing the event.
+				# this is an attempt to not process mousebuttonup events
+				# so fast that the time "skips" an index
 				pygame.event.set_blocked(MOUSEBUTTONUP)
 				time.sleep(0.25)
 				
@@ -177,7 +177,6 @@ def main():
 						runtime = 0
 						
 				return_from_ss = False
-				#got_weather = False
 				
 				break
 				
@@ -185,6 +184,8 @@ def main():
 				return
 
 		if screensaver_on is False:
+			# Show Time
+			
 			# Fill background
 			background = pygame.Surface(screen.get_size())
 			background = background.convert()
@@ -227,16 +228,17 @@ def main():
 
 			# wait a second to refresh
 			runtime += 1
-			#wtimer += 1
 			
 			if runtime == ssaver_time:
 				runtime = 0
 				screensaver_on = True
 			
+			# re-enable mousebutton up events after processing time
 			pygame.event.set_allowed(MOUSEBUTTONUP)
 			time.sleep(1)
 		
 		else:
+			# fire up the screensaver
 			size = [480,320]
 			
 			background = pygame.Surface(screen.get_size())
@@ -272,9 +274,11 @@ def main():
 					groups.append(Group([pos, -text.get_height()], speed))
 					
 				if random.randint(0,50) == 50:
+					# "mnatrix code" as a string made up of the current timezone/time/date
 					timedata = datetime.now(timezone(timezones[index]))
 					timestring = timedata.strftime('%X %Z %z') + locations[index] + timezones[index]
 					code = list(timestring)
+					
 					random.shuffle(code, random.random)
 					pos = [random.randint(1,size[0]/text_width+1)*text_width-text_width/2, random.randint(1,size[1]/text.get_height()+1)*text.get_height()]
 					groups.append(CodePartical(pos, random.randint(0,len(code)-1), code))
